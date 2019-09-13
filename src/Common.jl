@@ -11,7 +11,20 @@ function rand(::Type{T}, w::W, n::Int64; checkinput::Bool=true) where {T <: Gene
   @simd for i = 1:n
     @inbounds x[sample(1:4, w), i] = 1
   end
-  return T(x)
+  return T(x, checkinput=false)
+end
+
+
+function rand(::Type{T}, wv::Vector{W}; checkinput::Bool=true) where {T <: GeneticSeq, W<: Weights}
+  len = length(wv)
+  x = BitArray(fill(0, (4, len)))
+  @simd for i = 1:len
+    if checkinput && length(wv[i]) != 4
+      throw(ErrorException("Invalid sampling weights for $(i)th nt in $T generation"))
+    end
+    @inbounds x[sample(1:4, wv[i]), i] = 1
+  end
+  return T(x, checkinput=false)
 end
 
 
