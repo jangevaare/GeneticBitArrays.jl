@@ -3,7 +3,10 @@ function _checkinput(x::BitArray{2})
 end
 
 
-function rand(::Type{T}, w::W, n::Int64) where {T <: GeneticSeq, W<: Weights}
+function rand(::Type{T}, w::W, n::Int64; checkinput::Bool=true) where {T <: GeneticSeq, W<: Weights}
+  if checkinput && length(w) != 4
+    @error "Invalid sampling weights for $T generation"
+  end
   x = BitArray(fill(0, (4, n)))
   @simd for i = 1:n
     @inbounds x[sample(1:4, w), i] = 1
