@@ -1,3 +1,8 @@
+function _checkinput(x::BitArray{2})
+  return size(x, 1) == 4 && all(sum(x, dims=1) .== 1)
+end
+
+
 function rand(::Type{T}, w::W, n::Int64) where {T <: GeneticSeq, W<: Weights}
   x = BitArray(fill(0, (4, n)))
   @simd for i = 1:n
@@ -16,11 +21,11 @@ function show(io::IO, x::T) where {T <: GeneticSeq}
   len = length(x)
   println(io, "$(len)nt DNA sequence")
   if len <= 26
-    print(io, prod([onehot(T, x.data[:, i]) for i=1:len]))
+    print(io, prod([onehotinv(T, x.data[:, i]) for i=1:len]))
   else
-    print(io, prod([onehot(T, x.data[:, i]) for i=1:13]) *
+    print(io, prod([onehotinv(T, x.data[:, i]) for i=1:13]) *
               "..." *
-              prod([onehot(T, x.data[:, i]) for i=len-13:len]))
+              prod([onehotinv(T, x.data[:, i]) for i=len-13:len]))
   end
 end
 
@@ -30,12 +35,16 @@ function getindex(x::T, i::Int64) where {T <: GeneticSeq}
 end
 
 
-function setindex!(x::T, a::BitArray{1}, i) where {T <: GeneticSeq}
-  return x.data[:, i] = a
+function setindex!(x::T, a::BitArray{1}, i::Int64) where {T <: GeneticSeq}
+  if length(a) == 4 && sum(a) == 1
+    return x.data[:, i] = a
+  else
+    @error "Invalid input"
+  end
 end
 
 
-function setindex!(x::T, a::Char, i) where {T <: GeneticSeq}
+function setindex!(x::T, a::Char, i::Int64) where {T <: GeneticSeq}
   return x.data[:, i] = onehot(T, a)
 end
 

@@ -1,7 +1,7 @@
 name = "GeneticBitArrays"
 uuid = "5d6f8c34-7f74-4dab-a49b-48b3414fbfce"
 authors = ["Justin Angevaare <justinangevaare@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"

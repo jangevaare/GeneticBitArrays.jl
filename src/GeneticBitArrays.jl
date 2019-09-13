@@ -14,7 +14,7 @@ abstract type GeneticSeq end
 
 include("DNA.jl")
 include("RNA.jl")
-include("common.jl")
+include("Common.jl")
 
 export DNASeq, RNASeq, Weights
 

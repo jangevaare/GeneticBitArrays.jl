@@ -32,5 +32,4 @@ julia> x.data
 
 ## Notes
 * Ambiguities are not currently supported.
-* No error checking for I/O is provided.
 * For a full featured package for genetic sequences see [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl).

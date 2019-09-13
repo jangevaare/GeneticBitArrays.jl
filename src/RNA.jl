@@ -1,24 +1,56 @@
 struct RNASeq <: GeneticSeq
   data::BitArray{2}
+
+  function RNASeq(x; checkinput::Bool=true)
+    if checkinput
+      if _checkinput(x)
+        return new(x)
+      else
+        @error "Invalid input"
+      end
+    else
+      return new(x)
+    end
+  end
 end
 
 
 function onehot(::Type{RNASeq}, x::Char)
-  return ['A', 'C', 'G', 'U'] .== Ref(x)
+  if x     == 'A'
+    return BitArray{1}([1, 0, 0, 0])
+  elseif x == 'C'
+    return BitArray{1}([0, 1, 0, 0])
+  elseif x == 'G'
+    return BitArray{1}([0, 0, 1, 0])
+  elseif x == 'U'
+    return BitArray{1}([0, 0, 0, 1])
+  else
+    @error "Invalid `Char`"
+  end
 end
 
 
-function onehot(::Type{RNASeq}, x::BitArray{1})
+function onehotinv(::Type{RNASeq}, x::BitArray{1})
   return ['A', 'C', 'G', 'U'][x][1]
 end
 
 
 function RNASeq(seq::Vector{Char})
-  x = BitArray(undef, (4, length(seq)))
+  x = BitArray{2}(fill(0, (4, length(seq))))
   for i in 1:length(seq)
-    x[:, i] = onehot(RNASeq, seq[i])
+    if seq[i]     == 'A'
+      x[1, i] = 1
+    elseif seq[i] == 'C'
+      x[2, i] = 1
+    elseif seq[i] == 'G'
+      x[3, i] = 1
+    elseif seq[i] == 'U'
+      x[4, i] = 1
+    else
+      @error "Invalid  `Char` at index $i"
+    end
   end
-  return RNASeq(x)
+  return RNASeq(x, checkinput=false)
 end
 
 
