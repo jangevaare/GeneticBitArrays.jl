@@ -5,7 +5,7 @@ end
 
 function rand(::Type{T}, w::W, n::Int64; checkinput::Bool=true) where {T <: GeneticSeq, W<: Weights}
   if checkinput && length(w) != 4
-    @error "Invalid sampling weights for $T generation"
+    throw(ErrorException("Invalid sampling weights for $T generation"))
   end
   x = BitArray(fill(0, (4, n)))
   @simd for i = 1:n
@@ -42,7 +42,7 @@ function setindex!(x::T, a::BitArray{1}, i::Int64) where {T <: GeneticSeq}
   if length(a) == 4 && sum(a) == 1
     return x.data[:, i] = a
   else
-    @error "Invalid input"
+    throw(ErrorException("Invalid input"))
   end
 end
 

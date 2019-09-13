@@ -6,7 +6,7 @@ struct DNASeq <: GeneticSeq
       if _checkinput(x)
         return new(x)
       else
-        @error "Invalid input"
+        throw(ErrorException("Invalid input"))
       end
     else
       return new(x)
@@ -25,7 +25,7 @@ function onehot(::Type{DNASeq}, x::Char)
   elseif x == 'T'
     return BitArray{1}([0, 0, 0, 1])
   else
-    @error "Invalid  `Char`"
+    throw(ErrorException("Invalid `Char`"))
   end
 end
 
@@ -47,7 +47,7 @@ function DNASeq(seq::Vector{Char})
     elseif seq[i] == 'T'
       x[4, i] = 1
     else
-      @error "Invalid  `Char` at index $i"
+      throw(ErrorException("Invalid `Char` at index $i"))
     end
   end
   return DNASeq(x, checkinput=false)

@@ -23,3 +23,9 @@ end
   b[1] = 'U'
   @test b[1] == RNASeq("U")
 end
+
+@testset "Errors" begin
+  @test_throws ErrorException DNASeq("AAAU")
+  @test_throws ErrorException RNASeq("AAAT")
+  @test_throws ErrorException rand(RNASeq, Weights(fill(0.25, 3)), 1000)
+end
