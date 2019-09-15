@@ -16,6 +16,6 @@ include("DNA.jl")
 include("RNA.jl")
 include("Common.jl")
 
-export DNASeq, RNASeq, Weights
+export GeneticSeq, DNASeq, RNASeq, Weights
 
 end # module
