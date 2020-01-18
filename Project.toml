@@ -1,13 +1,16 @@
 name = "GeneticBitArrays"
 uuid = "5d6f8c34-7f74-4dab-a49b-48b3414fbfce"
 authors = ["Justin Angevaare <justinangevaare@gmail.com>"]
-version = "0.2.1"
+version = "0.3.0"
 
 [deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
-julia = "≥ 1.0.0"
+julia = "1.0, 2"
+StaticArrays = "0.12"
+StatsBase = "0.32"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

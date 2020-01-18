@@ -1,35 +1,26 @@
 # GeneticBitArrays.jl
 [![Build Status](https://travis-ci.com/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.com/jangevaare/GeneticBitArrays.jl)
 
-Minimal representations of genetic sequences.
+Minimal representations of DNA and RNA genetic sequences.
 
 ## Use
-Input using `String`, `Vector{Char}`, or use an appropriate `BitArray`.
+Input using `String`, `Vector{Char}` with nucleotides indicated by their [IUPAC code](https://www.bioinformatics.org/sms/iupac.html). You may also construct a sequence with a 4 x n `BitArray`, which is how sequences are represented internally with this package.
 
-*e.g.*
+## Example
 ```
-julia> DNASeq("AAAAGCCT")
+julia> x = DNASeq("NVHMDRWABSYCKGT-")
 
-8 nt DNA sequence
-AAAAGCCT
-```
-
-## Representation
-A 4 x n `BitArray` is used to represent sequences internally, where n is sequence length.
-
-
-```
-julia> x = DNASeq("AAAAGCCT")
+15nt DNA sequence
+NVHMDRWABSYCKG-
 
 julia> x.data
 
-4×8 BitArray{2}:
- 1  1  1  1  0  0  0  0
- 0  0  0  0  0  1  1  0
- 0  0  0  0  1  0  0  0
- 0  0  0  0  0  0  0  1
+4×15 BitArray{2}:
+ 1  1  1  1  1  1  1  1  0  0  0  0  0  0  0
+ 1  1  1  1  0  0  0  0  1  1  1  1  0  0  0
+ 1  1  0  0  1  1  0  0  1  1  0  0  1  1  0
+ 1  0  1  0  1  0  1  0  1  0  1  0  1  0  0
 ```
 
 ## Notes
-* Ambiguities are not currently supported.
 * For a full featured package for genetic sequences see [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl).
