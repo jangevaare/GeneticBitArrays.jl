@@ -81,7 +81,7 @@ module GeneticBitArrays
     s = BitArray{2}(undef, (4, length(x)))
     for i = eachindex(x)
       ind = findfirst(l .== x[i])
-      if isnothing(ind)
+      if ind === nothing
         throw(ErrorException("Unrecognized $(_seq(T)) `Char` $(x[i]) at index $i"))
       else
         s[:, i] = _bitslookup[ind]
@@ -92,15 +92,15 @@ module GeneticBitArrays
 
   function _bitarray(::Type{T}, x::Char) where {T <: GeneticSeq}
     ind = findfirst(_lookup(T) .== x)
-    if isnothing(ind)
-      @error "Unrecognized $(_seq(T)) `Char` $x"
+    if ind === nothing
+      throw(ErrorException("Unrecognized $(_seq(T)) `Char` $x"))
     end
     return _bitslookup[ind]
   end
 
   function _bitarray(::Type{T}, x::BitArray{1}) where {T <: GeneticSeq}
     if length(x) != 4
-      @error "Invalid input, must have a length of 4"
+      throw(ErrorException("Invalid input, must have a length of 4"))
     end
     return reshape(x, (4,1))
   end
