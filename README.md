@@ -1,5 +1,5 @@
 # GeneticBitArrays.jl
-[![Build Status](https://travis-ci.com/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.com/jangevaare/GeneticBitArrays.jl)
+[![Build Status](https://travis-ci.org/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.org/jangevaare/GeneticBitArrays.jl)
 
 Minimal representations of DNA and RNA genetic sequences.
 
