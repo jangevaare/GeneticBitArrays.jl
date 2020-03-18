@@ -4,7 +4,21 @@
 [![Build Status](https://travis-ci.org/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.org/jangevaare/GeneticBitArrays.jl)
 [![codecov.io](http://codecov.io/github/jangevaare/GeneticBitArrays/coverage.svg?branch=master)](http://codecov.io/github/jangevaare/GeneticBitArrays.jl?branch=master)
 
+## Description
 Minimal representations of DNA and RNA genetic sequences using `BitArray`s in [Julia](https://julialang.org).
+
+## Installation
+The current release can be installed from the Julia REPL with:
+
+```julia
+pkg> add GeneticBitArrays
+```
+
+The development version (master branch) can be installed with:
+
+```julia
+pkg> add GeneticBitArrays#master
+```
 
 ## Use
 Input using `String`, `Vector{Char}` with nucleotides indicated by their [IUPAC code](https://www.bioinformatics.org/sms/iupac.html). You may also construct a sequence with a 4 x n `BitArray` - the same way sequences are represented internally with this package.
