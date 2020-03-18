@@ -2,6 +2,7 @@
 [![Latest Release](https://img.shields.io/github/release/jangevaare/GeneticBitArrays.jl.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.org/jangevaare/GeneticBitArrays.jl)
+[![codecov.io](http://codecov.io/github/jangevaare/GeneticBitArrays/coverage.svg?branch=master)](http://codecov.io/github/jangevaare/GeneticBitArrays.jl?branch=master)
 
 Minimal representations of DNA and RNA genetic sequences using `BitArray`s in [Julia](https://julialang.org).
 
