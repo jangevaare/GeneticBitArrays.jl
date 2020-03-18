@@ -12,16 +12,16 @@ Input using `String`, `Vector{Char}` with nucleotides indicated by their [IUPAC 
 ```
 julia> x = DNASeq("NVHMDRWABSYCKGT-")
 
-15nt DNA sequence
-NVHMDRWABSYCKG-
+16nt DNA sequence
+NVHMDRWABSYCKGT-
 
 julia> x.data
 
-4×15 BitArray{2}:
- 1  1  1  1  1  1  1  1  0  0  0  0  0  0  0
- 1  1  1  1  0  0  0  0  1  1  1  1  0  0  0
- 1  1  0  0  1  1  0  0  1  1  0  0  1  1  0
- 1  0  1  0  1  0  1  0  1  0  1  0  1  0  0
+4×16 BitArray{2}:
+ 1  1  1  1  1  1  1  1  0  0  0  0  0  0  0  0
+ 1  1  1  1  0  0  0  0  1  1  1  1  0  0  0  0
+ 1  1  0  0  1  1  0  0  1  1  0  0  1  1  0  0
+ 1  0  1  0  1  0  1  0  1  0  1  0  1  0  1  0
 ```
 
 ## Notes
