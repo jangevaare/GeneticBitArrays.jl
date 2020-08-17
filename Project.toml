@@ -1,7 +1,7 @@
 name = "GeneticBitArrays"
 uuid = "5d6f8c34-7f74-4dab-a49b-48b3414fbfce"
 authors = ["Justin Angevaare <justinangevaare@gmail.com>"]
-version = "0.3.0"
+version = "0.3.1"
 
 [deps]
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
