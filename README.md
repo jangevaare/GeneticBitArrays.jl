@@ -2,7 +2,7 @@
 [![DOI](https://zenodo.org/badge/207670056.svg)](https://zenodo.org/badge/latestdoi/207670056)
 [![Latest Release](https://img.shields.io/github/release/jangevaare/GeneticBitArrays.jl.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/blob/master/LICENSE)
-[![Build Status](https://travis-ci.com/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.com/jangevaare/GeneticBitArrays.jl)
+[![Build Status](https://app.travis-ci.com/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://app.travis-ci.com/jangevaare/GeneticBitArrays.jl)
 [![codecov.io](http://codecov.io/github/jangevaare/GeneticBitArrays.jl/coverage.svg?branch=master)](http://codecov.io/github/jangevaare/GeneticBitArrays.jl?branch=master)
 
 ## Description
