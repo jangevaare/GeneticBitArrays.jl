@@ -1,4 +1,5 @@
 # GeneticBitArrays.jl
+[![DOI](https://zenodo.org/badge/207670056.svg)](https://zenodo.org/badge/latestdoi/207670056)
 [![Latest Release](https://img.shields.io/github/release/jangevaare/GeneticBitArrays.jl.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/jangevaare/GeneticBitArrays.jl.svg?branch=master)](https://travis-ci.com/jangevaare/GeneticBitArrays.jl)
