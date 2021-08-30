@@ -1,4 +1,4 @@
-name: CI-stable
+name: Tests
 
 on: [push, pull_request]
 
