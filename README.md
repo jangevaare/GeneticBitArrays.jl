@@ -2,7 +2,10 @@
 [![DOI](https://zenodo.org/badge/207670056.svg)](https://zenodo.org/badge/latestdoi/207670056)
 [![Latest Release](https://img.shields.io/github/release/jangevaare/GeneticBitArrays.jl.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/blob/master/LICENSE)
-[![CI-stable](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/ci-stable.yml/badge.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/ci-stable.yml)
+
+[![test-lts](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-lts.yml/badge.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-lts.yml)
+[![test-stable](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-stable.yml/badge.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-stable.yml)
+[![test-nightly](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-nightly.yml/badge.svg)](https://github.com/jangevaare/GeneticBitArrays.jl/actions/workflows/test-nightly.yml)
 [![codecov.io](http://codecov.io/github/jangevaare/GeneticBitArrays.jl/coverage.svg?branch=master)](http://codecov.io/github/jangevaare/GeneticBitArrays.jl?branch=master)
 
 ## Description
