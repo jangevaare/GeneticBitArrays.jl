@@ -11,8 +11,7 @@ module GeneticBitArrays
          Random.rand,
          Random.AbstractRNG,
          StatsBase.Weights,
-         StatsBase.sample,
-         StaticArrays.SVector
+         StatsBase.sample
 
   abstract type GeneticSeq end
 
@@ -56,50 +55,62 @@ module GeneticBitArrays
     return T(x.data[:, i])
   end
 
-  const _bitslookup = SVector{16, BitArray{1}}([1;1;1;1], [1;1;1;0],
-                                               [1;1;0;1], [1;1;0;0],
-                                               [1;0;1;1], [1;0;1;0],
-                                               [1;0;0;1], [1;0;0;0],
-                                               [0;1;1;1], [0;1;1;0],
-                                               [0;1;0;1], [0;1;0;0],
-                                               [0;0;1;1], [0;0;1;0],
-                                               [0;0;0;1], [0;0;0;0])
+  const _dnacharlookup = ('N', 'V', 'H', 'M', 'D', 'R', 'W', 'A',
+                          'B', 'S', 'Y', 'C', 'K', 'G', 'T', '-')
+  const _rnacharlookup = ('N', 'V', 'H', 'M', 'D', 'R', 'W', 'A',
+                          'B', 'S', 'Y', 'C', 'K', 'G', 'U', '-')
 
-  const _dnacharlookup = SVector{16, Char}('N', 'V', 'H', 'M',
-                                           'D', 'R', 'W', 'A',
-                                           'B', 'S', 'Y', 'C',
-                                           'K', 'G', 'T', '-')
+  # Four-bit masks encode membership in A, C, G, T/U, in that order.
+  # 0xff distinguishes invalid input from the valid gap mask (zero).
+  function _masklookup(chars)
+    masks = fill(UInt8(0xff), 128)
+    for (i, c) in enumerate(chars)
+      masks[Int(c) + 1] = UInt8(16 - i)
+    end
+    return Tuple(masks)
+  end
 
-  const _rnacharlookup = SVector{16, Char}('N', 'V', 'H', 'M',
-                                           'D', 'R', 'W', 'A',
-                                           'B', 'S', 'Y', 'C',
-                                           'K', 'G', 'U', '-')
+  const _dnamasklookup = _masklookup(_dnacharlookup)
+  const _rnamasklookup = _masklookup(_rnacharlookup)
 
-  const _lookup(::Type{DNASeq}) = _dnacharlookup
-  const _lookup(::Type{RNASeq}) = _rnacharlookup
-  const _seq(::Type{DNASeq}) = "DNA"
-  const _seq(::Type{RNASeq}) = "RNA"
+  _lookup(::Type{DNASeq}) = _dnacharlookup
+  _lookup(::Type{RNASeq}) = _rnacharlookup
+  _masklookup(::Type{DNASeq}) = _dnamasklookup
+  _masklookup(::Type{RNASeq}) = _rnamasklookup
+  _seq(::Type{DNASeq}) = "DNA"
+  _seq(::Type{RNASeq}) = "RNA"
+
+  function _mask(::Type{T}, c::Char) where {T <: GeneticSeq}
+    code = UInt32(c)
+    return code < 128 ? _masklookup(T)[Int(code) + 1] : UInt8(0xff)
+  end
+
+  function _setmask!(bits::BitArray{2}, mask::UInt8, i::Int)
+    bits[1, i] = (mask & 0x08) != 0
+    bits[2, i] = (mask & 0x04) != 0
+    bits[3, i] = (mask & 0x02) != 0
+    bits[4, i] = (mask & 0x01) != 0
+    return bits
+  end
 
   function _bitarray(::Type{T}, x::Union{String, Vector{Char}}) where {T <: GeneticSeq}
-    l = _lookup(T)
-    s = BitArray{2}(undef, (4, length(x)))
-    for i = eachindex(x)
-      ind = findfirst(l .== x[i])
-      if ind === nothing
-        throw(ErrorException("Unrecognized $(_seq(T)) `Char` $(x[i]) at index $i"))
-      else
-        s[:, i] = _bitslookup[ind]
+    bits = BitArray{2}(undef, (4, length(x)))
+    for (i, c) in enumerate(x)
+      mask = _mask(T, c)
+      if mask == 0xff
+        throw(ErrorException("Unrecognized $(_seq(T)) `Char` $c at index $i"))
       end
+      _setmask!(bits, mask, i)
     end
-    return s
+    return bits
   end
 
   function _bitarray(::Type{T}, x::Char) where {T <: GeneticSeq}
-    ind = findfirst(_lookup(T) .== x)
-    if ind === nothing
+    mask = _mask(T, x)
+    if mask == 0xff
       throw(ErrorException("Unrecognized $(_seq(T)) `Char` $x"))
     end
-    return reshape(copy(_bitslookup[ind]), 4, 1)
+    return _setmask!(BitArray{2}(undef, (4, 1)), mask, 1)
   end
 
   function _bitarray(::Type{T}, x::BitArray{1}) where {T <: GeneticSeq}

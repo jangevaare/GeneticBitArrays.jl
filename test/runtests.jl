@@ -11,6 +11,34 @@ using Test,
   @test length(DNASeq("ACGT")[2]) == length(DNASeq("C"))
 end
 
+@testset "Nucleotide lookups" begin
+  # Expected base membership, independent of the lookup's numeric encoding.
+  memberships = ("ACGT", "ACG", "ACT", "AC", "AGT", "AG", "AT", "A",
+                 "CGT", "CG", "CT", "C", "GT", "G", "T", "")
+  for (T, alphabet) in ((DNASeq, "NVHMDRWABSYCKGT-"),
+                        (RNASeq, "NVHMDRWABSYCKGU-"))
+    expected = BitArray([base in members for base in "ACGT", members in memberships])
+    @test T(alphabet).data == expected
+    @test T(collect(alphabet)).data == expected
+    @test size(T("").data) == (4, 0)
+    @test T(Char[]) == T("")
+    for (i, c) in enumerate(alphabet)
+      @test T(c).data == expected[:, i:i]
+      sequence = T("AA")
+      sequence[2] = c
+      @test sequence.data[:, 2] == expected[:, i]
+      @test sequence[1] == T("A")
+    end
+    for c in vcat(collect(Char(0):Char(127)), ['é', 'α', '🧬'])
+      if !(c in alphabet)
+        @test_throws ErrorException T(c)
+        @test_throws ErrorException T("A" * string(c))
+        @test_throws ErrorException T(['A', c])
+      end
+    end
+  end
+end
+
 @testset "Random" begin
   a = rand(RNASeq, Weights(fill(0.25, 4)), 1000)
   @test typeof(a) == RNASeq
