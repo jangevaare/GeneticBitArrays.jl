@@ -1,3 +1,4 @@
+using Random
 using Test,
       GeneticBitArrays
 
@@ -51,5 +52,36 @@ end
       @test GeneticBitArrays.convert(String, sequence) == text
     end
     @test occursin(alphabet, sprint(show, T(alphabet)))
+  end
+end
+
+@testset "Explicit random generators" begin
+  generators = isdefined(Random, :Xoshiro) ? (MersenneTwister, Random.Xoshiro) : (MersenneTwister,)
+  w = Weights([1, 2, 3, 4])
+  for R in generators, T in (DNASeq, RNASeq), args in ((w, 100), (fill(w, 100),))
+    rng = R(42)
+    reference = R(42)
+    a = rand(rng, T, args...)
+    @test a == rand(reference, T, args...)
+    @test rand(rng) == rand(reference)
+    @test rand(R(43), T, args...) != a
+    @test all(sum(a.data, dims=1) .== 1)
+    Random.seed!(123)
+    expected = rand()
+    Random.seed!(123)
+    rand(R(42), T, args...)
+    @test rand() == expected
+    Random.seed!(123)
+    default = rand(T, args...)
+    Random.seed!(123)
+    @test rand(T, args...) == default
+  end
+  for T in (DNASeq, RNASeq)
+    @test length(rand(MersenneTwister(42), T, w, 0)) == 0
+    @test length(rand(MersenneTwister(42), T, typeof(w)[])) == 0
+    @test rand(MersenneTwister(42), T, Weights([0, 1, 0, 0]), 4) == T("CCCC")
+    @test rand(MersenneTwister(42), T, [Weights([1, 0, 0, 0]), Weights([0, 0, 1, 0])]) == T("AG")
+    @test_throws ErrorException rand(MersenneTwister(42), T, Weights([1, 1, 1]), 4)
+    @test_throws ErrorException rand(MersenneTwister(42), T, [w, Weights([1, 1, 1])])
   end
 end
