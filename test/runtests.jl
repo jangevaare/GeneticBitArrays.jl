@@ -22,6 +22,13 @@ end
 end
 
 @testset "Indexing" begin
+  for T in (DNASeq, RNASeq)
+    first = T('A')
+    second = T('A')
+    first[1] = 'C'
+    @test second == T("A")
+    @test T('A') == T("A")
+  end
   @test DNASeq("ACGT")[2] == DNASeq("C")
   c =  RNASeq("ACGU")
   c[1] = 'U'
