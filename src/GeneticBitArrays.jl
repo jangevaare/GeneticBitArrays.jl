@@ -96,7 +96,7 @@ module GeneticBitArrays
     if ind === nothing
       throw(ErrorException("Unrecognized $(_seq(T)) `Char` $x"))
     end
-    return _bitslookup[ind]
+    return reshape(copy(_bitslookup[ind]), 4, 1)
   end
 
   function _bitarray(::Type{T}, x::BitArray{1}) where {T <: GeneticSeq}
