@@ -33,3 +33,16 @@ end
   @test_throws ErrorException RNASeq("AAAT")
   @test_throws ErrorException rand(RNASeq, Weights(fill(0.25, 3)), 1000)
 end
+
+@testset "String conversion" begin
+  for (T, alphabet) in ((DNASeq, "NVHMDRWABSYCKGT-"),
+                        (RNASeq, "NVHMDRWABSYCKGU-"))
+    for text in ("", alphabet, repeat(alphabet, 100))
+      sequence = T(text)
+      @test String(sequence) == text
+      @test convert(String, sequence) == text
+      @test GeneticBitArrays.convert(String, sequence) == text
+    end
+    @test occursin(alphabet, sprint(show, T(alphabet)))
+  end
+end
