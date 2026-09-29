@@ -1,6 +1,7 @@
 module GeneticBitArrays
 
-  import Base.show,
+  import Base.convert,
+         Base.show,
          Base.length,
          Base.getindex,
          Base.setindex!,
@@ -113,94 +114,26 @@ module GeneticBitArrays
     return x
   end
 
-  function convert(::Type{String}, x::T) where {T <: GeneticSeq}
-    s = ""
+  """
+      String(sequence::GeneticSeq)
+      convert(String, sequence::GeneticSeq)
+
+  Return the sequence as an IUPAC nucleotide string, including ambiguity codes
+  and `-` for gaps.
+  """
+  function Base.String(x::T) where {T <: GeneticSeq}
+    chars = _lookup(T)
+    bytes = Vector{UInt8}(undef, length(x))
     for i in 1:length(x)
-      if x.data[1,i]
-        if x.data[2,i]
-          if x.data[3,i]
-            if x.data[4,i]
-              # A C G T/U
-              s *= "N"
-            else
-              # A C G
-              s *= "V"
-            end
-          else
-            if x.data[4,i]
-              # A C T/U
-              s *= "H"
-            else
-              # A C
-              s *= "M"
-            end
-          end
-        else
-          if x.data[3,i]
-            if x.data[4,i]
-              # A G T/U
-              s *= "D"
-            else
-              # A G
-              s *= "R"
-            end
-          else
-            if x.data[4,i]
-              # A T/U
-              s *= "W"
-            else
-              # A
-              s *= "A"
-            end
-          end
-        end
-      else
-        if x.data[2,i]
-          if x.data[3,i]
-            if x.data[4,i]
-              # C G T/U
-              s *= "B"
-            else
-              # C G
-              s *= "S"
-            end
-          else
-            if x.data[4,i]
-              # C T/U
-              s *= "Y"
-            else
-              # C
-              s *= "C"
-            end
-          end
-        else
-          if x.data[3,i]
-            if x.data[4,i]
-              # G T/U
-              s *= "K"
-            else
-              # G
-              s *= "G"
-            end
-          else
-            if x.data[4,i]
-              if T == DNASeq
-                # T
-                s *= "T"
-              else
-                # U
-                s *= "U"
-              end
-            else
-              # gap
-              s *= "-"
-            end
-          end
-        end
-      end
+      # The lookup lists the four-bit patterns from 1111 through 0000.
+      mask = 8 * x.data[1,i] + 4 * x.data[2,i] +
+             2 * x.data[3,i] + x.data[4,i]
+      bytes[i] = UInt8(chars[16 - mask])
     end
-    return s
+    return String(bytes)
   end
+
+  convert(::Type{String}, x::GeneticSeq) = String(x)
 
   function show(io::IO, x::T) where {T <: GeneticSeq}
     len = length(x)
