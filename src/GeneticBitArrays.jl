@@ -1,12 +1,15 @@
 module GeneticBitArrays
 
+  import Random
+
   import Base.convert,
          Base.show,
          Base.length,
          Base.getindex,
          Base.setindex!,
          Base.==,
-         Base.rand,
+         Random.rand,
+         Random.AbstractRNG,
          StatsBase.Weights,
          StatsBase.sample,
          StaticArrays.SVector
@@ -151,28 +154,55 @@ module GeneticBitArrays
     return x.data == y.data
   end
 
-  function rand(::Type{T}, w::W, n::Int64; checkinput::Bool=true) where {T <: GeneticSeq, W<: Weights}
+  @static if isdefined(Random, :default_rng)
+    _default_rng() = Random.default_rng()
+  else
+    _default_rng() = Random.GLOBAL_RNG
+  end
+
+  """
+      rand([rng::AbstractRNG], T, weights::Weights, n::Integer; checkinput=true)
+      rand([rng::AbstractRNG], T, weights::Vector{<:Weights}; checkinput=true)
+
+  Generate a `DNASeq` or `RNASeq` with weights for A, C, G, and T/U.
+  Supply one set of weights for all `n` sites, or one set per site.
+  An explicit RNG controls every draw; omitted RNGs use Julia's default RNG.
+  Exact random streams may change across Julia or dependency versions.
+
+  # Example
+  ```julia
+  using GeneticBitArrays, Random
+  rand(MersenneTwister(42), DNASeq, Weights([1, 1, 1, 1]), 100)
+  ```
+  """
+  function rand(rng::AbstractRNG, ::Type{T}, w::W, n::Integer; checkinput::Bool=true) where {T <: GeneticSeq, W <: Weights}
     if checkinput && length(w) != 4
       throw(ErrorException("Invalid sampling weights for $T generation"))
     end
-    x = BitArray(fill(0, (4, n)))
-    @simd for i = 1:n
-      @inbounds x[sample(1:4, w), i] = 1
+    x = falses(4, n)
+    for i in 1:n
+      x[sample(rng, 1:4, w), i] = true
     end
     return T(x, checkinput=false)
   end
 
-  function rand(::Type{T}, wv::Vector{W}; checkinput::Bool=true) where {T <: GeneticSeq, W<: Weights}
+  function rand(rng::AbstractRNG, ::Type{T}, wv::Vector{W}; checkinput::Bool=true) where {T <: GeneticSeq, W <: Weights}
     len = length(wv)
-    x = BitArray(fill(0, (4, len)))
-    @simd for i = 1:len
+    x = falses(4, len)
+    for i in 1:len
       if checkinput && length(wv[i]) != 4
         throw(ErrorException("Invalid sampling weights for $(i)th nt in $T generation"))
       end
-      @inbounds x[sample(1:4, wv[i]), i] = 1
+      x[sample(rng, 1:4, wv[i]), i] = true
     end
     return T(x, checkinput=false)
   end
+
+  rand(::Type{T}, w::Weights, n::Integer; checkinput::Bool=true) where {T <: GeneticSeq} =
+    rand(_default_rng(), T, w, n; checkinput=checkinput)
+
+  rand(::Type{T}, wv::Vector{<:Weights}; checkinput::Bool=true) where {T <: GeneticSeq} =
+    rand(_default_rng(), T, wv; checkinput=checkinput)
 
   export GeneticSeq, DNASeq, RNASeq, Weights
 
